@@ -1,0 +1,80 @@
+{% import "_includes/forms" as forms %}
+{% set jsScript %}
+	<form method="post" id="criticalCssForm" accept-charset="UTF-8">
+		{{ csrfInput() }}
+		{{ forms.hidden({
+		    name: 'url', 
+		    value: url
+	    }) }}
+		{{ forms.hidden({
+		    name: 'template', 
+		    value: template
+		}) }}
+	</form>
+	<script>
+		document.onreadystatechange = function () {
+		    if (document.readyState === "complete") {
+				function isInViewport(elem) {
+					var elementTop = $(elem).offset().top;
+					var elementBottom = elementTop + $(elem).outerHeight();
+					
+					var viewportTop = $(window).scrollTop();
+					var viewportBottom = viewportTop + $(window).height();
+					
+					return elementTop < viewportBottom && elementBottom > viewportTop;
+				}
+				
+				function textNodesUnder(el){
+					var options = [];
+					var walk=document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, null, false);
+					while(walk.nextNode()){
+						if (isInViewport($(walk.currentNode))) {
+							var selector = walk.currentNode.nodeName.toLowerCase();
+							options.push(selector);
+							if (walk.currentNode.id.length) {
+								selector += "#"+walk.currentNode.id;
+								options.push("#"+walk.currentNode.id);
+							}
+							if (walk.currentNode.className.length) {
+								var classes = "."+walk.currentNode.className;
+								selector += classes.replace(" ", ".");
+								options.push(classes.replace(" ", "."));
+							}
+						}
+					}
+					options = JSON.stringify(options);
+					return options;
+				}
+				var cssOptions = textNodesUnder(document.body);
+				var cssFiles = [];
+				$("link[type='text/css']").each(function(){
+					cssFiles.push($(this).attr("href"));
+				});
+				cssFiles = JSON.stringify(cssFiles);
+				
+				var response;
+				var submission = new FormData($("#criticalCssForm")[0]);
+				submission.append("css", cssOptions);
+				submission.append("stylesheets", cssFiles);
+				$.ajax({
+					url : "/actions/critical-css/default/save-css",
+					type: "POST",
+					data : submission,
+					processData: false,
+					contentType: false,
+					success:function(data, textStatus, jqXHR){
+						response = data;
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						response = "<p>Error: We are sorry but your ticket was not submitted correctly.</p>";
+					}
+				}).always(function(data){
+					$("body").html(response);
+					window.location.replace(window.location.href);
+				});
+			}
+		}
+	</script>
+{% endset %}
+{% set html = html|replace({"</html>": jsScript~"</html>"}) %}
+{{ html|raw }}

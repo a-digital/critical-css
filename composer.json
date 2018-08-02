@@ -1,0 +1,43 @@
+{
+    "name": "adigital/critical-css",
+    "description": "Generate critical css without the need for ssh access",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "critical css"
+    ],
+    "support": {
+        "docs": "https://github.com/criticalcss/critical-css/blob/master/README.md",
+        "issues": "https://github.com/criticalcss/critical-css/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "A Digital",
+            "homepage": "https://adigital.agency"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "adigital\\criticalcss\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Critical CSS",
+        "handle": "critical-css",
+        "hasCpSettings": true,
+        "hasCpSection": true,
+        "changelogUrl": "https://raw.githubusercontent.com/criticalcss/critical-css/master/CHANGELOG.md",
+        "components": {
+            "criticalCssService": "adigital\\criticalcss\\services\\CriticalCssService"
+        },
+        "class": "adigital\\criticalcss\\CriticalCss"
+    }
+}

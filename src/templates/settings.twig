@@ -1,0 +1,38 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Critical CSS plugin for Craft CMS 3.x
+ *
+ * Critical CSS Settings.twig
+ *
+ * @author    A Digital
+ * @copyright Copyright (c) 2018 A Digital
+ * @link      https://adigital.agency
+ * @package   CriticalCss
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("adigital\\criticalcss\\assetbundles\\criticalcss\\CriticalCssAsset") %}
+
+{{ forms.editableTableField({
+    label: 'Path Config',
+    instructions: 'Please configure the URLs and Templates from which your Critical CSS will be generated.',
+    id: 'pathConfig',
+    name: 'pathConfig',
+    cols: [
+	    {
+	    	heading: "URL",
+	    	info: "<p>Please enter an absolute url without the slash at the front <b>e.g. contact-us/thank-you or 404</b></p>",
+	    	type: "singleline"
+	    },
+	    {
+	    	heading: "Template",
+	    	info: "<p>Please enter a template path without the slash at the front <b>e.g. contact/thank-you or 404</b></p>",
+	    	type: "singleline"
+	    }
+    ],
+    rows: settings['pathConfig']})
+}}

@@ -1,0 +1,24 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Critical CSS plugin for Craft CMS
+ *
+ * CriticalCssUtility Utility Content
+ *
+ * @author    A Digital
+ * @copyright Copyright (c) 2018 A Digital
+ * @link      https://adigital.agency
+ * @package   CriticalCss
+ * @since     1.0.0
+ */
+#}
+
+<h1>CriticalCssUtility</h1>
+
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@adigital/criticalcss/assetbundles/criticalcssutilityutility/dist', true) ~ '/img/CriticalCssUtility-icon.svg' %}
+
+<img src="{{ iconUrl }}" height="64" width="64" />
+
+<p>Your Utility content goes here</p>
+
+<p>{{ someVar }}</p>

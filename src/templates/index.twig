@@ -1,0 +1,85 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Critical CSS plugin for Craft CMS 3.x
+ *
+ * Critical CSS index.twig
+ *
+ * @author    A Digital
+ * @copyright Copyright (c) 2018 A Digital
+ * @link      https://adigital.agency
+ * @package   CriticalCss
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("adigital\\criticalcss\\assetbundles\\criticalcss\\CriticalCssAsset") %}
+{% do view.registerAssetBundle("adigital\\criticalcss\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
+
+{# Link for the ? icon at the bottom of the page #}
+{% set docsUrl = "https://github.com/criticalcss/critical-css/blob/master/README.md" %}
+
+{# The title of this CP section #}
+{% set title = "Critical CSS" %}
+
+{# The URL to this plugin's base CP section #}
+{% set pluginCpUrl = url('critical-css') %}
+
+{% block actionButton %}
+	<form method="POST">
+		{{ csrfInput() }}
+		{{ forms.hidden({
+		    name: 'action',
+		    value: 'critical-css/default/regenerate'
+		}) }}
+		<input type="submit" class="btn submit" value="{{ 'Regenerate All'|t('app') }}">
+	</form>
+{% endblock %}
+
+{# The content of the CP Section #}
+{% set content %}
+    <h2>{{ "Configured Pages"|t('critical-css') }}</h2>
+    <p class="textline"></p>
+    {% set setting = craft.criticalCss.getConfigSettings %}
+	{% if setting is iterable %}
+		<table class="data fullwidth">{# add class of collapsed for mobile responsive table #}
+			<thead>
+				<tr>
+					<th>URL</th>
+					<th>Template</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+    			{% for row in setting %}
+    				<tr>
+		    			{% for column, value in row %}
+			    			<td>{{ value }}</td>
+		    			{% endfor %}
+		    			<td>
+		    				<form method="POST">
+		    					{{ csrfInput() }}
+			    				{{ forms.hidden({
+								    name: 'action',
+								    value: 'critical-css/default/regenerate-single'
+								}) }}
+			    				{{ forms.hidden({
+								    name: 'url',
+								    value: row[0]
+								}) }}
+								{{ forms.hidden({
+								    name: 'template',
+								    value: row[1]
+								}) }}
+			    				<input type="submit" class="btn submit" value="{{ 'Regenerate'|t('app') }}">
+		    				</form>
+		    			</td>
+    				</tr>
+    			{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+{% endset %}
