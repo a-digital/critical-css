@@ -11,8 +11,8 @@
         "critical css"
     ],
     "support": {
-        "docs": "https://github.com/criticalcss/critical-css/blob/master/README.md",
-        "issues": "https://github.com/criticalcss/critical-css/issues"
+        "docs": "https://github.com/a-digital/critical-css/blob/master/README.md",
+        "issues": "https://github.com/a-digital/critical-css/issues"
     },
     "license": "MIT",
     "authors": [
@@ -34,7 +34,7 @@
         "handle": "critical-css",
         "hasCpSettings": true,
         "hasCpSection": true,
-        "changelogUrl": "https://raw.githubusercontent.com/criticalcss/critical-css/master/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/a-digital/critical-css/master/CHANGELOG.md",
         "components": {
             "criticalCssService": "adigital\\criticalcss\\services\\CriticalCssService"
         },
