@@ -28,6 +28,7 @@
 {# The URL to this plugin's base CP section #}
 {% set pluginCpUrl = url('critical-css') %}
 
+{#
 {% block actionButton %}
 	<form method="POST">
 		{{ csrfInput() }}
@@ -38,6 +39,7 @@
 		<input type="submit" class="btn submit" value="{{ 'Regenerate All'|t('app') }}">
 	</form>
 {% endblock %}
+#}
 
 {# The content of the CP Section #}
 {% set content %}
