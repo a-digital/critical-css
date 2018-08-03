@@ -60,4 +60,10 @@ $("link[rel='preload']").each(function(){
 
 Please note: this is just one example of how you can get critical css up and running. There are other ways of implementing this also which can be found in various blog posts. We are just providing you with the generation of the file, how you implement it is completely up to you!
 
+## Critical CSS Roadmap
+
+Some things to do, and ideas for potential features:
+
+* Fix generate all functionality and uncomment the button for this.
+
 Brought to you by [A Digital](https://adigital.agency)
