@@ -1,5 +1,9 @@
 # Critical CSS Changelog
 
+## 1.0.4 - 2020-11-03
+### Changed
+- Namespacing consistency across assetbundles
+
 ## 1.0.3 - 2020-11-03
 ### Fixed
 - Composer 2 compatibility - Asset bundle PSR-4 autoloading standard

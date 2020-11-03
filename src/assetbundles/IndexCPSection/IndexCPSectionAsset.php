@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 A Digital
  */
 
-namespace adigital\criticalcss\assetbundles\indexcpsection;
+namespace adigital\criticalcss\assetbundles\IndexCPSection;
 
 use Craft;
 use craft\web\AssetBundle;

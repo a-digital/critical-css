@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 A Digital
  */
 
-namespace adigital\criticalcss\assetbundles\criticalcssutilityutility;
+namespace adigital\criticalcss\assetbundles\CriticalCssUtilityUtility;
 
 use Craft;
 use craft\web\AssetBundle;
