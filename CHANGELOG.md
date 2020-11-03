@@ -1,5 +1,9 @@
 # Critical CSS Changelog
 
+## 1.0.5 - 2020-11-03
+### Changed
+- Updated assetbundle registration in cp templates
+
 ## 1.0.4 - 2020-11-03
 ### Changed
 - Namespacing consistency across assetbundles
