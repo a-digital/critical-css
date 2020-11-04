@@ -11,7 +11,7 @@
 namespace adigital\criticalcss\utilities;
 
 use adigital\criticalcss\CriticalCss;
-use adigital\criticalcss\assetbundles\criticalcssutilityutility\CriticalCssUtilityUtilityAsset;
+use adigital\criticalcss\assetbundles\CriticalCssUtilityUtility\CriticalCssUtilityUtilityAsset;
 
 use Craft;
 use craft\base\Utility;
@@ -61,7 +61,7 @@ class CriticalCssUtility extends Utility
      */
     public static function iconPath()
     {
-        return Craft::getAlias("@adigital/criticalcss/assetbundles/criticalcssutilityutility/dist/img/CriticalCssUtility-icon.svg");
+        return Craft::getAlias("@adigital/criticalcss/assetbundles/CriticalCssUtilityUtility/dist/img/CriticalCssUtility-icon.svg");
     }
 
     /**

@@ -1,5 +1,9 @@
 # Critical CSS Changelog
 
+## 1.0.6 - 2020-11-04
+### Fixed
+- Asset bundle sourcePath not correctly defined
+
 ## 1.0.5 - 2020-11-03
 ### Changed
 - Updated assetbundle registration in cp templates

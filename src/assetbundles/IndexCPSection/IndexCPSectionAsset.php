@@ -43,7 +43,7 @@ class IndexCPSectionAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = "@adigital/criticalcss/assetbundles/indexcpsection/dist";
+        $this->sourcePath = "@adigital/criticalcss/assetbundles/IndexCPSection/dist";
 
         // define the dependencies
         $this->depends = [

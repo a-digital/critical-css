@@ -43,7 +43,7 @@ class CriticalCssUtilityUtilityAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = "@adigital/criticalcss/assetbundles/criticalcssutilityutility/dist";
+        $this->sourcePath = "@adigital/criticalcss/assetbundles/CriticalCssUtilityUtility/dist";
 
         // define the dependencies
         $this->depends = [
