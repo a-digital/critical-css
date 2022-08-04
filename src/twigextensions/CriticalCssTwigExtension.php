@@ -79,24 +79,4 @@ class CriticalCssTwigExtension extends AbstractExtension
     {
         return $text . " in the way";
     }
-
-    public function getTokenParsers()
-    {
-        // TODO: Implement getTokenParsers() method.
-    }
-
-    public function getNodeVisitors()
-    {
-        // TODO: Implement getNodeVisitors() method.
-    }
-
-    public function getTests()
-    {
-        // TODO: Implement getTests() method.
-    }
-
-    public function getOperators()
-    {
-        // TODO: Implement getOperators() method.
-    }
 }

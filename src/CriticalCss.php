@@ -94,7 +94,8 @@ class CriticalCss extends Plugin
         self::$plugin = $this;
 
         // Add in our Twig extensions
-        Craft::$app->view->registerTwigExtension(new CriticalCssTwigExtension());
+        $extension = new CriticalCssTwigExtension();
+        Craft::$app->view->registerTwigExtension($extension);
 
         // Add in our console commands
         if (Craft::$app instanceof ConsoleApplication) {
