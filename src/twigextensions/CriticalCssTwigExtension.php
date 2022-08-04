@@ -10,9 +10,9 @@
 
 namespace adigital\criticalcss\twigextensions;
 
-use adigital\criticalcss\CriticalCss;
-
-use Craft;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
  * Twig can be extended in many ways; you can add extra tags, filters, tests, operators,
@@ -25,7 +25,7 @@ use Craft;
  * @package   CriticalCss
  * @since     1.0.0
  */
-class CriticalCssTwigExtension extends \Twig_Extension
+class CriticalCssTwigExtension extends AbstractExtension
 {
     // Public Methods
     // =========================================================================
@@ -35,7 +35,7 @@ class CriticalCssTwigExtension extends \Twig_Extension
      *
      * @return string The extension name
      */
-    public function getName()
+    public function getName(): string
     {
         return 'CriticalCss';
     }
@@ -45,12 +45,12 @@ class CriticalCssTwigExtension extends \Twig_Extension
      *
      *      {{ 'something' | someFilter }}
      *
-     * @return array
+     * @return TwigFilter[]
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
-            new \Twig_SimpleFilter('someFilter', [$this, 'someInternalFunction']),
+            new TwigFilter('someFilter', [$this, 'someInternalFunction']),
         ];
     }
 
@@ -59,12 +59,12 @@ class CriticalCssTwigExtension extends \Twig_Extension
      *
      *      {% set this = someFunction('something') %}
      *
-    * @return array
+     * @return TwigFunction[]
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction('someFunction', [$this, 'someInternalFunction']),
+            new TwigFunction('someFunction', [$this, 'someInternalFunction']),
         ];
     }
 
@@ -75,10 +75,28 @@ class CriticalCssTwigExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function someInternalFunction($text = null)
+    public function someInternalFunction($text = null): string
     {
-        $result = $text . " in the way";
+        return $text . " in the way";
+    }
 
-        return $result;
+    public function getTokenParsers()
+    {
+        // TODO: Implement getTokenParsers() method.
+    }
+
+    public function getNodeVisitors()
+    {
+        // TODO: Implement getNodeVisitors() method.
+    }
+
+    public function getTests()
+    {
+        // TODO: Implement getTests() method.
+    }
+
+    public function getOperators()
+    {
+        // TODO: Implement getOperators() method.
     }
 }

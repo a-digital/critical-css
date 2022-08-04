@@ -10,10 +10,13 @@
 
 namespace adigital\criticalcss\services;
 
-use adigital\criticalcss\CriticalCss;
-
 use Craft;
 use craft\base\Component;
+use JsonException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\Exception;
 
 /**
  * CriticalCssService Service
@@ -41,57 +44,51 @@ class CriticalCssService extends Component
      *
      *     CriticalCss::$plugin->criticalCssService->letsGetCriticalCritical()
      *
-     * @return mixed
+     * @param $url
+     * @param $template
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
-    public function letsGetCriticalCritical($url, $template)
+    public function letsGetCriticalCritical($url, $template): string
     {
-	    $result = "";
-	    
 	    $html = file_get_contents(Craft::getAlias('@web')."/".$url);
-	    
-	    $rendered = Craft::$app->getView()->renderTemplate(
-	        'critical-css/template-test',
-	        [
-	            'html' => $html,
-	            'url' => $url,
-	            'template' => $template
-	        ]
+
+        return Craft::$app->getView()->renderTemplate(
+            'critical-css/template-test',
+            compact('html', 'url', 'template')
         );
-        
-        return $rendered;
     }
-    
-    public function saveCritical($template, $postedCss, $stylesheets)
+
+    /**
+     * @param $template
+     * @param $postedCss
+     * @param $stylesheets
+     * @return bool
+     * @throws Exception
+     * @throws JsonException
+     */
+    public function saveCritical($template, $postedCss, $stylesheets): bool
     {
-	    $stylesheets = json_decode($stylesheets);
-	    $postedCss = array_unique(json_decode($postedCss));
-	    
-	    $cssFiles = [];
-	    $mainCss = [];
+	    $stylesheets = json_decode($stylesheets, true, 512, JSON_THROW_ON_ERROR);
+	    $postedCss = array_unique(json_decode($postedCss, true, 512, JSON_THROW_ON_ERROR));
+
 	    $finalCss = "";
 	    foreach($stylesheets as $stylesheet) {
 		    $fileCss = file_get_contents($stylesheet);
-		    $fileCss = str_replace("\n", "", $fileCss);
-		    $fileCss = str_replace("*/", "*/\n", $fileCss);
-		    $fileCss = preg_replace("/\/\*(.*)\*\//", "", $fileCss);
-		    $fileCss = str_replace("\n", "", $fileCss);
-		    $fileCss = str_replace('"', "'", $fileCss);
-		    
-		    $fileCss = str_replace(";", '","', $fileCss);
-			$fileCss = str_replace("{", '":{"', $fileCss);
-			$fileCss = substr(str_replace("}", '"},"', $fileCss), 0, -2);
-			$fileCss = str_replace(',""', '', $fileCss);
-			$fileCss = str_replace('{', "{\n", $fileCss);
-			$fileCss = str_replace('},', "},\n", $fileCss);
-			$fileCss = str_replace('}', "\n}", $fileCss);
-			$fileCss = explode("\n", $fileCss);
+            $fileCss = str_replace(["\n", "*/"], ["", "*/\n"], $fileCss);
+            $fileCss = preg_replace("/\/\*(.*)\*\//", "", $fileCss);
+            $fileCss = str_replace(["\n", '"', ";", "{"], ["", "'", '","', '":{"'], $fileCss);
+            $fileCss = substr(str_replace("}", '"},"', $fileCss), 0, -2);
+            $fileCss = str_replace([',""', '{', '},', '}'], ['', "{\n", "},\n", "\n}"], $fileCss);
+            $fileCss = explode("\n", $fileCss);
 			$pos = 0;
 			$rules = [];
 			$rule = [];
-			$key = "";
 			$type = "";
-			
-			$computedCss = [];
+
 			$arrKey = "";
 			$nextKey = "";
 			$finalKey = "";
@@ -100,45 +97,35 @@ class CriticalCssService extends Component
 				$up = false;
 				$down = false;
 				if ($line) {
-					if (strpos($line, "{") !== false) {
+					if (str_contains($line, "{")) {
 						if ($pos !== 0) {
-							$line = str_replace('": "', ':', $line);
-							$line = str_replace('":"', ':', $line);
-						}
+                            $line = str_replace(['": "', '":"'], ':', $line);
+                        }
 						$up = true;
-					} elseif (strpos($line, "}") !== false) {
+					} elseif (str_contains($line, "}")) {
 						$down = true;
 					} else {
-						$line = str_replace("[", "{", $line);
-						$line = str_replace("]", "}", $line);
-						$line = str_replace('": "', ':', $line);
-						$line = str_replace('":"', ':', $line);
-						if ($type == "array") {
+                        $line = str_replace(["[", "]", '": "', '":"'], ["{", "}", ':', ':'], $line);
+                        if ($type == "array") {
 							$line = str_replace(':', '": "', $line);
 						}
-						if (strpos($line, "{") !== false && strpos($line, "}") === false) {
+						if (str_contains($line, "{") && !str_contains($line, "}")) {
 							$up = true;
-						} else if (strpos($line, "{") === false && strpos($line, "}") !== false) {
+						} else if (!str_contains($line, "{") && str_contains($line, "}")) {
 							$down = true;
 						}
 					}
-					if ($type == "obj" && strpos($line, '":') === false) {
+					if ($type == "obj" && !str_contains($line, '":')) {
 						$line = utf8_decode($line);
 						$line = str_replace(':', '": "', $line);
 						$jsonLine = "{".$line."}";
-						if (json_decode($jsonLine) !== NULL) {
-							$line = substr(json_encode(json_decode($jsonLine)), 1, -1);
+						if (json_decode($jsonLine, true, 512, JSON_THROW_ON_ERROR) !== NULL) {
+							$line = substr(json_encode(json_decode($jsonLine, true, 512, JSON_THROW_ON_ERROR), JSON_THROW_ON_ERROR), 1, -1);
 						}
 					}
-					if (array_key_exists($key, $computedCss)) {
-						array_merge($computedCss[$key], $line);
-					} else {
-						$computedCss[$key] = $line;
-					}
 					$fileCss[$key] = $line;
-					$line = str_replace(":{", "", $line);
-					$line = str_replace("\"", "", $line);
-					if ($pos === 0) {
+                    $line = str_replace([":{", "\""], "", $line);
+                    if ($pos === 0) {
 						if ($down === false) {
 							$rule[$line] = [];
 						}
@@ -159,11 +146,9 @@ class CriticalCssService extends Component
 						if ($up === true) {
 							$finalKey = $line;
 						}
-					} else {
-						if ($down === false) {
-							$rule[$arrKey][$nextKey][$finalKey][$line] = [];
-						}
-					}
+					} else if ($down === false) {
+                        $rule[$arrKey][$nextKey][$finalKey][$line] = [];
+                    }
 					if ($up === true) {
 						$pos++;
 					}
@@ -174,9 +159,9 @@ class CriticalCssService extends Component
 						$rules[] = $rule;
 						$rule = [];
 					}
-					if (strpos($line, "{") !== false) {
+					if (str_contains($line, "{")) {
 						$type = "obj";
-					} else if (strpos($line, "[") !== false) {
+					} else if (str_contains($line, "[")) {
 						$type = "array";
 					} else {
 						$type = "rule";
@@ -193,7 +178,7 @@ class CriticalCssService extends Component
 					$spaces = explode(" ", $selector);
 					$fullstops = explode(".", $selector);
 					foreach($postedCss as $templateSelector) {
-						if (in_array($templateSelector, $commas) || in_array($templateSelector, $spaces) || in_array($templateSelector, $fullstops)) {
+						if (in_array($templateSelector, $commas, true) || in_array($templateSelector, $spaces, true) || in_array($templateSelector, $fullstops, true)) {
 							$add = true;
 						}
 					}
@@ -206,7 +191,7 @@ class CriticalCssService extends Component
 							$spaces = explode(" ", $property);
 							$fullstops = explode(".", $property);
 							foreach($postedCss as $templateSelector) {
-								if (in_array($templateSelector, $commas) || in_array($templateSelector, $spaces) || in_array($templateSelector, $fullstops)) {
+								if (in_array($templateSelector, $commas, true) || in_array($templateSelector, $spaces, true) || in_array($templateSelector, $fullstops, true)) {
 									$add = true;
 								}
 							}
@@ -219,7 +204,7 @@ class CriticalCssService extends Component
 									$spaces = explode(" ", $nestedProperty);
 									$fullstops = explode(".", $nestedProperty);
 									foreach($postedCss as $templateSelector) {
-										if (in_array($templateSelector, $commas) || in_array($templateSelector, $spaces) || in_array($templateSelector, $fullstops)) {
+										if (in_array($templateSelector, $commas, true) || in_array($templateSelector, $spaces, true) || in_array($templateSelector, $fullstops, true)) {
 											$add = true;
 										}
 									}

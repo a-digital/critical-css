@@ -10,11 +10,7 @@
 
 namespace adigital\criticalcss\console\controllers;
 
-use adigital\criticalcss\CriticalCss;
-
-use Craft;
 use yii\console\Controller;
-use yii\helpers\Console;
 
 /**
  * Default Command
@@ -52,9 +48,9 @@ class DefaultController extends Controller
      * The first line of this method docblock is displayed as the description
      * of the Console Command in ./craft help
      *
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $result = 'something';
 
@@ -69,9 +65,9 @@ class DefaultController extends Controller
      * The first line of this method docblock is displayed as the description
      * of the Console Command in ./craft help
      *
-     * @return mixed
+     * @return string
      */
-    public function actionDoSomething()
+    public function actionDoSomething(): string
     {
         $result = 'something';
 

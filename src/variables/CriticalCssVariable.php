@@ -12,8 +12,6 @@ namespace adigital\criticalcss\variables;
 
 use adigital\criticalcss\CriticalCss;
 
-use Craft;
-
 /**
  * Critical CSS Variable
  *
@@ -42,10 +40,9 @@ class CriticalCssVariable
      *
      *     {{ craft.criticalCss.exampleVariable(twigValue) }}
      *
-     * @param null $optional
-     * @return string
+     * @return array|bool
      */
-    public function getConfigSettings()
+    public function getConfigSettings(): array|bool
     {
         $settings = CriticalCss::$plugin->getSettings();
         if ($settings->pathConfig) {

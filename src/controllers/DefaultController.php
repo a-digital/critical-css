@@ -14,6 +14,10 @@ use adigital\criticalcss\CriticalCss;
 
 use Craft;
 use craft\web\Controller;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\Exception;
 
 /**
  * Default Controller
@@ -46,7 +50,7 @@ class DefaultController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = ['index'];
+    protected int|bool|array $allowAnonymous = ['index'];
 
     // Public Methods
     // =========================================================================
@@ -55,39 +59,43 @@ class DefaultController extends Controller
      * Handle a request going to our plugin's index action URL,
      * e.g.: actions/critical-css/default
      *
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
-        $result = 'Welcome to the DefaultController actionIndex() method';
-
-        return $result;
+        return 'Welcome to the DefaultController actionIndex() method';
     }
 
     /**
      * Handle a request going to our plugin's actionRegenerateSingle URL,
      * e.g.: actions/critical-css/default/regenerate-single
      *
-     * @return mixed
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
-    public function actionRegenerateSingle()
+    public function actionRegenerateSingle(): string
     {
         $request = Craft::$app->getRequest();
 	    $url = $request->getParam('url');
 	    $template = $request->getParam('template');
-	    
-	    $result = CriticalCss::$plugin->criticalCssService->letsGetCriticalCritical($url, $template);
 
-        return $result;
+        return CriticalCss::$plugin->criticalCssService->letsGetCriticalCritical($url, $template);
     }
-    
+
     /**
      * Handle a request going to our plugin's actionRegenerate URL,
      * e.g.: actions/critical-css/default/regenerate
      *
-     * @return mixed
+     * @return string
+     * @throws Exception
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function actionRegenerate()
+    public function actionRegenerate(): string
     {
         $result = 'Welcome to the DefaultController actionRegenerate() method';
         
@@ -100,22 +108,21 @@ class DefaultController extends Controller
 
         return $result;
     }
-    
+
     /**
      * Handle a request going to our plugin's actionSaveCss URL,
      * e.g.: actions/critical-css/default/save-css
      *
-     * @return mixed
+     * @return bool
+     * @throws Exception
      */
-    public function actionSaveCss()
+    public function actionSaveCss(): bool
     {
 		$request = Craft::$app->getRequest();
 	    $template = $request->getParam('template');
 	    $postedCss = $request->getParam('css');
 	    $stylesheets = $request->getParam('stylesheets');
-	    
-	    $result = CriticalCss::$plugin->criticalCssService->saveCritical($template, $postedCss, $stylesheets);
-		
-        return $result;
+
+        return CriticalCss::$plugin->criticalCssService->saveCritical($template, $postedCss, $stylesheets);
     }
 }

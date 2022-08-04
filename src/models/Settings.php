@@ -10,9 +10,6 @@
 
 namespace adigital\criticalcss\models;
 
-use adigital\criticalcss\CriticalCss;
-
-use Craft;
 use craft\base\Model;
 
 /**
@@ -37,9 +34,9 @@ class Settings extends Model
     /**
      * Some field model attribute
      *
-     * @var string
+     * @var array
      */
-    public $pathConfig = [["","index"]];
+    public array $pathConfig = [["","index"]];
 
     // Public Methods
     // =========================================================================
@@ -54,7 +51,7 @@ class Settings extends Model
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['pathConfig', 'default', 'value' => [["","index"]]],

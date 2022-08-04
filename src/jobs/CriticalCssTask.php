@@ -10,8 +10,6 @@
 
 namespace adigital\criticalcss\jobs;
 
-use adigital\criticalcss\CriticalCss;
-
 use Craft;
 use craft\queue\BaseJob;
 
@@ -55,7 +53,7 @@ class CriticalCssTask extends BaseJob
      *
      * @var string
      */
-    public $someAttribute = 'Some Default';
+    public string $someAttribute = 'Some Default';
 
     // Public Methods
     // =========================================================================
@@ -66,8 +64,11 @@ class CriticalCssTask extends BaseJob
      * jobs that needs to be done here.
      *
      * More info: https://github.com/yiisoft/yii2-queue
+     *
+     * @param $queue
+     * @return void
      */
-    public function execute($queue)
+    public function execute($queue): void
     {
         // Do work here
     }

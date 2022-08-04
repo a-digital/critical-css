@@ -10,11 +10,15 @@
 
 namespace adigital\criticalcss\utilities;
 
-use adigital\criticalcss\CriticalCss;
 use adigital\criticalcss\assetbundles\CriticalCssUtilityUtility\CriticalCssUtilityUtilityAsset;
 
 use Craft;
 use craft\base\Utility;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * Critical CSS Utility
@@ -57,29 +61,22 @@ class CriticalCssUtility extends Utility
     /**
      * Returns the path to the utility's SVG icon.
      *
-     * @return string|null The path to the utility SVG icon
+     * @return string|null
      */
-    public static function iconPath()
+    public static function iconPath(): ?string
     {
         return Craft::getAlias("@adigital/criticalcss/assetbundles/CriticalCssUtilityUtility/dist/img/CriticalCssUtility-icon.svg");
-    }
-
-    /**
-     * Returns the number that should be shown in the utility’s nav item badge.
-     *
-     * If `0` is returned, no badge will be shown
-     *
-     * @return int
-     */
-    public static function badgeCount(): int
-    {
-        return 0;
     }
 
     /**
      * Returns the utility's content HTML.
      *
      * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     public static function contentHtml(): string
     {

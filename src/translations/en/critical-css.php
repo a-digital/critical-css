@@ -22,4 +22,8 @@
  */
 return [
     'Critical CSS plugin loaded' => 'Critical CSS plugin loaded',
+    'Configured Pages' => 'Configured Pages',
+    'CriticalCssTask' => 'CriticalCssTask',
+    'CriticalCssUtility' => 'CriticalCssUtility',
+    '{name} plugin loaded' => '{name} plugin loaded'
 ];
